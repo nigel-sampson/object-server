@@ -1,0 +1,691 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nichevo.ObjectServer</name>
+    </assembly>
+    <members>
+        <member name="T:Nichevo.ObjectServer.ChildrenAttribute">
+            <summary>
+            Specifies the a collection of child objects.
+            </summary>
+            <remarks>
+            The type of the attributed property must be an IList.
+            </remarks>
+            <example>
+            The example shows a property attributed with <see cref="T:Nichevo.ObjectServer.ChildrenAttribute">ChildrenAttribute</see>.
+            <code>
+            [ChildrenAttribute(typeof(ParentType), "ParentProperty"]
+            public abstract ServerObjectCollection Children
+            {
+            	get;
+            	set;
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ChildrenAttribute.#ctor(System.Type,System.String)">
+            <summary>
+            Initialises the new instance of ChildrenAttribute.
+            </summary>
+            <param name="childType">The type of object that represents the child data.</param>
+            <param name="propertyName">The name of the property in the child class definition which is attributed with the matching <see cref="T:Nichevo.ObjectServer.ParentAttribute">ParentAttribute</see>.</param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ChildrenAttribute.ChildType">
+            <summary>
+            Gets the type of object that represents the child data.
+            </summary>
+            <value>
+            The type of object that represents the child data.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ChildrenAttribute.PropertyName">
+            <summary>
+            Gets the name of the property in the child class definition which is attributed with the matching <see cref="T:Nichevo.ObjectServer.ParentAttribute">ParentAttribute</see>.
+            </summary>
+            <value>
+            The name of the property in the child class definition which is attributed with the matching <see cref="T:Nichevo.ObjectServer.ParentAttribute">ParentAttribute</see>.
+            </value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ChildrenData">
+            <summary>
+            Maintains references to a peristed objects Children collections.
+            </summary>
+            <remarks>
+            This object shouldn't really be used but must be exposed by ObjectServer so that the dynamic 
+            proxies can manipulate an objects data.
+            </remarks>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ChildrenData.Item(System.String)">
+            <summary>
+            Gets the child collection associated with the given property.
+            </summary>
+            <param name="key">The name of the property in the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> which exposes this child collection.</param>
+            <value>A <see cref="T:Nichevo.ObjectServer.ServerObjectCollection">ServerObjectCollection</see> that is a child collection or if no children exists an empty collection.</value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ColumnAttribute">
+            <summary>
+            Specifies the column which holds the value of the attributed property.
+            </summary>
+            <remarks>
+            The property must be abstract. The property given in <see cref="T:Nichevo.ObjectServer.TableAttribute">TableAttribute</see>
+            must be read only while all others must have at least an accessor.
+            </remarks>
+            <example>
+            The example shows a property attributed with <see cref="T:Nichevo.ObjectServer.ColumnAttribute">ColumnAttribute</see>.
+            <code>
+            [ColumnAttribute("nameColumn")]
+            public abstract stirng Name
+            {
+            	get;
+            	set;
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ColumnAttribute.#ctor(System.String)">
+            <summary>
+            Initialises a new instance of ColumnAttribute
+            </summary>
+            <param name="columnName">The name of the column in the database that holds the value for the attributed property.</param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ColumnAttribute.ColumnName">
+            <summary>
+            Gets the name of the column in the database that holds the value for the attributed property.
+            </summary>
+            <value>
+            The name of the column in the database that holds the value for the attributed property.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ColumnAttribute.NullValue">
+            <summary>
+            Gets or sets the value to expose when the data store holds a Null value.
+            </summary>
+            <remarks>
+            The value to expose when the data store holds a Null value.
+            </remarks>
+        </member>
+        <member name="T:Nichevo.ObjectServer.DeleteAction">
+            <summary>
+            Desribes the action a ServerObject will take when a parent object is marked for deletetion.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.DeleteAction.Null">
+            <summary>
+            Sets the parent reference in each child to a NULL value.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.DeleteAction.Cascade">
+            <summary>
+            Cascades the delete to each child. 
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.DeleteAction.Throw">
+            <summary>
+            Throws a <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see> if children exist.
+            </summary>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ObjectData">
+            <summary>
+            Maintains simple data values for the persisted object.
+            </summary>
+            <remarks>
+            This object shouldn't really be used but must be exposed by ObjectServer so that the dynamic 
+            proxies can manipulate an objects data.
+            </remarks>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ObjectData.Item(System.String)">
+            <summary>
+            Gets or sets the value for the given property.
+            </summary>
+            <remarks>
+            To assign a null value use value defined in the <see cref="T:Nichevo.ObjectServer.ColumnAttribute">ColumnAttribute</see>.
+            </remarks>
+            <param name="key">The name of the property in the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> which exposes this value.</param>
+            <value>The value for the property specified by the key</value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ObjectManager">
+            <summary>
+            Component used to create transactions to the data source.
+            </summary>
+            <remarks>
+            The ObjectManager is the equivalent of a database server. Each transaction created by
+            the ObjectManager has its own dedicated connection to the data source.
+            </remarks>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectManager.#ctor">
+            <summary>
+            Initialises a new instance of ObjectManager.
+            </summary>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectManager.#ctor(Nichevo.ObjectServer.ServerType,System.String)">
+            <summary>
+            nitialises a new instance of ObjectManager of the specified ServerType using the given connection string.
+            </summary>
+            <param name="serverType">The type of data source to use.</param>
+            <param name="connectionString">String containing connection info to the data source.</param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectManager.Dispose(System.Boolean)">
+            <summary>
+            Releases the resources used by the <see cref="T:Nichevo.ObjectServer.ObjectManager">ObjectManager</see>.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectManager.BeginTransaction">
+            <summary>
+            Creates a new transaction for the data source.
+            </summary>
+            <remarks>
+            Once the transaction has been completed you must explcitly commit the transaction by
+            using the <see cref="M:Nichevo.ObjectServer.ObjectTransaction.Commit">Commit</see> method.
+            </remarks>
+            <returns>
+            A newly created <see cref="T:Nichevo.ObjectServer.ObjectTransaction">ObjectTransaction</see>.
+            </returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectManager.PreloadSchemas(System.String)">
+            <summary>
+            Scans the given assembly for suitable types and preloads the schema information.
+            </summary>
+            <remarks>
+            The given assembly will have to be already loaded in the AppDomain for PreloadSchemas to
+            detect it.
+            </remarks>
+            <param name="assemblyName">The name of the assembly to scan.</param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ObjectManager.ObjectServerType">
+            <summary>
+            Gets and sets the type of data source being connected to.
+            </summary>
+            <value>
+            The type of data source being connected to, the default is <see cref="F:Nichevo.ObjectServer.ServerType.SqlServer">SqlServer</see>
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ObjectManager.ConnectionString">
+            <summary>
+            Gets and sets the information used to connecto to the data source.
+            </summary>
+            <value>
+            The information used to connecto to the data source.
+            </value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ObjectServerException">
+            <summary>
+            The exception that is thrown when ObjectServer returns a warning or error.
+            </summary>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectServerException.#ctor">
+            <summary>
+            Initialises a new instance of the ObjectServerException class.
+            </summary>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectServerException.#ctor(System.String)">
+            <summary>
+            Initialises a new instance of the ObjectServerException class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initialses a new instance of the ObjectServerException class with a specified error message and
+            a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for this exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectServerException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initialises a new instance of the ObjectServerException class with serialised data.
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialised object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ObjectTransaction">
+            <summary>
+            Represent a logical transaction of object manipulations with the data source.
+            </summary>
+            <remarks>
+            An ObjectTransaction allows actions such has
+            <list type="bullet">
+            <item>
+            <term>Create</term>
+            <description>Initialise a new object with default values and a generated primary key</description>
+            </item>
+            <item>
+            <term>Select</term>
+            <description>Initialise a new object or collection of objects with values from the data source</description>
+            </item>
+            <item>
+            <term>Delete</term>
+            <description>Deleting existing objects from the data source</description>
+            </item>
+            <item>
+            <term>Commit</term>
+            <description>Updating the data source with the operations performed through the transaction</description>
+            </item>
+            </list>
+            An <see cref="T:Nichevo.ObjectServer.ObjectTransaction">ObjectTransaction</see> is created by an <see cref="T:Nichevo.ObjectServer.ObjectManager">ObjectManager</see>, 
+            and each <see cref="T:Nichevo.ObjectServer.ObjectTransaction">ObjectTransaction</see> has its own dedicated connection to the data source.
+            <para>
+            Each ObjectTransaction maintains a cache of the objects loaded so far and trys to resolve references by returning cached objects
+            first. This means that the ObjectTransaction maintains object identity within the scope of the transaction. This allows object identity
+            to be compared simple on object reference equality.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.Create(System.Type)">
+            <summary>
+            Creates a new peristed object and initialises its primary key.
+            </summary>
+            <remarks>
+            This overload is for objects whose PrimaryKey is of type Identity or Guid (where ObjectServer handles primary key initialisation).
+            If the primary key type is Defined then this overload will throw an exception.
+            <para>
+            The actual objects returned from a call to Create are not of the defined type but of a
+            proxy class which sub-classes the persisted object and implements the abstract properties.
+            This is transparent as long as no access to the type occurs. If this is done then it is 
+            nessecary to access the proxy's base type to get back to the defined type.
+            </para>
+            </remarks>
+            <param name="type">The type of object to create.</param>
+            <returns>A newly initialised proxy for the specified type.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.Create(System.Type,System.Object)">
+            <summary>
+            Creates a new persisted object with the specified primary key.
+            </summary>
+            <param name="type">The type of object to create.</param>
+            <param name="key">The user defined primary key</param>
+            <remarks>
+            This overload is for objects whose PrimaryKey is of type Identity or Guid (where ObjectServer handles primary key initialisation).
+            If the primary key type is Defined then this overload will throw an exception.
+            <para>
+            The actual objects returned from a call to Create are not of the defined type but of a
+            proxy class which sub-classes the persisted object and implements the abstract properties.
+            This is transparent as long as no access to the type occurs. If this is done then it is 
+            nessecary to access the proxy's base type to get back to the defined type.
+            </para>
+            </remarks>
+            <returns>A newly initialised proxy for the specified type.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.Select(System.Type,System.Object)">
+            <summary>
+            Retrieves an object from the data source of the specified type with the specified primary key.
+            </summary>
+            <remarks>
+            Selects a single object from the data source using the given key to locate the values. If no values exist in the data source then Select returns null.
+            <para>
+            The actual objects returned from a call to Select are not of the defined type but of a
+            proxy class which sub-classes the persisted object and implements the abstract properties.
+            This is transparent as long as no access to the type occurs. If this is done then it is 
+            nessecary to access the proxy's base type to get back to the defined type.
+            </para>
+            </remarks>
+            <param name="type">The type of object to create.</param>
+            <param name="key">The primary key which to select the object in the data source.</param>
+            <returns>A newly initialised proxy for the specified type and with the values given from the data source for the specified primary key.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.Delete(Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Marks a object for removal in the transaction.
+            </summary>
+            <remarks>
+            This method can take a lengthy time dependent on its position in the relational graph due to having to 
+            traverse an object's child objects and either delete or set to null.
+            <para>
+            If the object graph traversal encounters an child relation with at least one valid object and ActionOnDelete is
+            <see cref="F:Nichevo.ObjectServer.DeleteAction.Throw">DeleteAction.Throw</see> then an <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see>
+            will be thrown. It is likely that the object graph will be left in an invalid state and it is not advised to <see cref="M:Nichevo.ObjectServer.ObjectTransaction.Commit">Commit</see>
+            the transaction.
+            </para>
+            </remarks>
+            <param name="obj">The object to be marked for removal.</param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.Commit">
+            <summary>
+            Commits the transaction to the data source.
+            </summary>
+            <remarks>
+            Flushes all inserted, updated and deleted objects to the data source. If an error is encountered during the 
+            object graph traversal an <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see> will be thrown
+            an all actions so far will be rolled back, this may leave the object graph in an invalid state so it is not 
+            advised to Commit the transaction again.
+            <para>
+            Commit calculates the correct order of the data source operations including assigning data source assigned keys
+            to refering child objects.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ObjectTransaction.SelectWebObjects(System.Object)">
+            <summary>
+            Retrives objects based on primary keys in the current <see cref="T:System.Web.HttpRequest">HttpRequest</see>.
+            </summary>
+            <remarks>
+            Fields marked with <see cref="T:Nichevo.ObjectServer.WebObjectAttribute">WebObjectAttribute</see> must be either public or protected for
+            them to be initialsied by a call to SelectWebObjects.
+            </remarks>
+            <param name="obj">The object containing the attributed fields.</param>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ParentAttribute">
+            <summary>
+            Specifies the column which holds the primary key for the objects parent.
+            </summary>
+            <remarks>
+            The type of the attributed property must be a valid object for persistance and also the property must be abstract.
+            </remarks>
+            <example>
+            The example shows a property attributed with <see cref="T:Nichevo.ObjectServer.ParentAttribute">ParentAttribute</see>.
+            <code>
+            [ParentAttribute("parentColumn")]
+            public abstract ParentType Parent
+            {
+            	get;
+            	set;
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ParentAttribute.#ctor(System.String)">
+            <summary>
+            Initialises a new instance of ParentAttribute
+            </summary>
+            <param name="columnName">The name of the column in the database that holds the primary key to the parent object.</param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ParentAttribute.ColumnName">
+            <summary>
+            Gets the name of the column in the database that holds the primary key to the parent object.
+            </summary>
+            <value>
+            The name of the column in the database that holds the primary key to the parent object.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ParentAttribute.DeleteAction">
+            <summary>
+            Gets and sets the action an object should take with regard to its children when deleted.
+            </summary>
+            <value>
+            The action an object should take with regard to its children when deleted, the default is DeleteAction.Throw.
+            </value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ParentData">
+            <summary>
+            Maintains references to a peristed objects Parent objects.
+            </summary>
+            <remarks>
+            This object shouldn't really be used but must be exposed by ObjectServer so that the dynamic 
+            proxies can manipulate an objects data.
+            </remarks>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ParentData.Item(System.String)">
+            <summary>
+            Gets or sets the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> that is a Parent object.
+            </summary>
+            <remarks>
+            On object access if a parent exists but has not be retrieved by ObjectServer then it will be retrieved and returned.
+            Otherwise the existing object will be returned. If you wish a null value to be set the assign null to the parent.
+            When an object is assigned as a parent, ObjectServer will locate the correct children collection and automatically append the current object.
+            </remarks>
+            <param name="key">The name of the property in the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> which exposes this Parent.</param>
+            <value>A <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> that is a Parent object or if no parent exists null.</value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.PrimaryKeyType">
+            <summary>
+            Describes the type of Primary Key an object uses to identify itself in the database.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.PrimaryKeyType.Identity">
+            <summary>
+            The object uses an integer as an indentifier and is system defined.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.PrimaryKeyType.Guid">
+            <summary>
+            The object uses a Globally Unique Indentifer and is system defined.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.PrimaryKeyType.Defined">
+            <summary>
+            The object uses a user provided indentifer.
+            </summary>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ServerObject">
+            <summary>
+            Objects for persistence must sub-class this object.
+            </summary>
+            <remarks>
+            For an object to be persisted by ObjectServer it must inherit from <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </remarks>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObject.#ctor">
+            <summary>
+            Initialises a new instance of <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ServerObject.Data">
+            <summary>
+            Gets a reference to the <see cref="T:Nichevo.ObjectServer.ObjectData">ObjectData</see> object which contains the simple data values for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+            <value>
+            A reference to the <see cref="T:Nichevo.ObjectServer.ObjectData">ObjectData</see> object which contains the simple data values for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ServerObject.Parents">
+            <summary>
+            Gets a reference to the <see cref="T:Nichevo.ObjectServer.ParentData">ParentData</see> object which contains the parent objects for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+            <value>
+            A reference to the <see cref="T:Nichevo.ObjectServer.ParentData">ParentData</see> object which contains the parent objects for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ServerObject.Children">
+            <summary>
+            Gets a reference to the <see cref="T:Nichevo.ObjectServer.ChildrenData">ChildrenData</see> object which contains the child collections for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+            <value>
+            A reference to the <see cref="T:Nichevo.ObjectServer.ChildrenData">ChildrenData</see> object which contains the child collections for the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ServerObject.Transaction">
+            <summary>
+            Gets a reference to the <see cref="T:Nichevo.ObjectServer.ObjectTransaction">ObjectTransaction</see> reponsible for this <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+            <value>
+            A reference to the <see cref="T:Nichevo.ObjectServer.ObjectTransaction">ObjectTransaction</see> reponsible for this <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ServerObjectCollection">
+            <summary>
+            Represents a collection of <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> objects.
+            </summary>
+            <remarks>
+            Provides a simple collection object that can represent a set of <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> objects.
+            </remarks>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.#ctor">
+            <summary>
+            Initialises a new instances of <see cref="T:Nichevo.ObjectServer.ServerObjectCollection">ServerObjectCollection</see>.
+            </summary>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.Add(Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Adds the specified <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to the collection.
+            </summary>
+            <param name="obj">The <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to add.</param>
+            <returns>The index at which the new element was inserted.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.Remove(Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Removes the specified <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> from the collection.
+            </summary>
+            <param name="obj">The <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to remove from the collection.</param>
+            <exception cref="T:System.ArgumentException">
+            The specified object is not found in the collection.
+            </exception>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.CopyTo(Nichevo.ObjectServer.ServerObject[],System.Int32)">
+            <summary>
+            Copies the collection objects to a one-dimensional <see cref="T:System.Array">Array</see> instance beginning at the specified index
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array">Array</see> that is the destination of the values copied from the collection. </param>
+            <param name="index">The index of the array at which to begin inserting. </param>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.Contains(Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Gets a value indicating whether the collection contains the specified <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </summary>
+            <param name="obj">The <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to search for in the collection. </param>
+            <returns><see langword="true">true</see> if the collection contains the specified object; otherwise, <see langword="false">false</see>.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.IndexOf(Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Gets the index in the collection of the specified <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>, if it exists in the collection.
+            </summary>
+            <param name="obj">The <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to locate in the collection.</param>
+            <returns>The index in the collection of the specified object, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Nichevo.ObjectServer.ServerObjectCollection.Insert(System.Int32,Nichevo.ObjectServer.ServerObject)">
+            <summary>
+            Inserts the specified <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> into the collection at the specified index.
+            </summary>
+            <param name="index">The zero-based index where the specified object should be inserted.</param>
+            <param name="obj">The <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> to insert. </param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.ServerObjectCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> at the specified index in the collection.
+            </summary>
+            <param name="index">The zero-based index of the collection to access.</param>
+            <value>A <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> at each valid index.</value>
+            <exception cref="T:System.ArgumentOutOfRangeException">The index parameter is outside the valid range of indices for the collection.</exception>
+        </member>
+        <member name="T:Nichevo.ObjectServer.ServerType">
+            <summary>
+            Describes the data store used by ObjectServer to perist object data.
+            </summary>
+        </member>
+        <member name="F:Nichevo.ObjectServer.ServerType.SqlServer">
+            <summary>
+            Microsoft SQL Server 7.0 or 2000
+            </summary>
+        </member>
+        <member name="T:Nichevo.ObjectServer.TableAttribute">
+            <summary>
+            Specifies the table in the system that holds the attribute class's data.
+            </summary>
+            <remarks>
+            Classes attributed with <see cref="T:Nichevo.ObjectServer.TableAttribute">TableAttribute</see> should be abstract and be a sub-class of <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see>.
+            </remarks>
+            <example>
+            The example shows a simple object to be persisted marked with <see cref="T:Nichevo.ObjectServer.TableAttribute">TableAttribute</see>
+            <code>
+            [Table("TableName", "PrimaryKeyProperty", PrimaryKeyType.Guid)]
+            public class MyObject : ServerObject
+            {
+            	...
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Nichevo.ObjectServer.TableAttribute.#ctor(System.String,System.String,Nichevo.ObjectServer.PrimaryKeyType)">
+            <summary>
+            Initialises a new instance of TableAttribute with the specified table name, primary key property and the primary key type.
+            </summary>
+            <param name="tableName">The name of the table in the system which holds the data for the attributed class.</param>
+            <param name="primaryKey">The name of the property in the attributed class which provides a unique identifier for this class.</param>
+            <param name="keyType">The type of primary key used to identify unique instances of this class.</param>
+        </member>
+        <member name="P:Nichevo.ObjectServer.TableAttribute.TableName">
+            <summary>
+            Gets the name of the table in the system which holds the data for the attributed class.
+            </summary>
+            <value>
+            The name of the table in the system which holds the data for the attributed class
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.TableAttribute.PrimaryKey">
+            <summary>
+            Gets the name of the property in the attribute class which provides a unique identifier for this class.
+            </summary>
+            <value>
+            The name of the property in the attribute class which provides a unique identifier for this class.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.TableAttribute.KeyType">
+            <summary>
+            Gets the type of primary key used to identify unique instances of this class.
+            </summary>
+            <value>
+            The type of primary key used to identify unique instances of this class.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.TableAttribute.DefaultOrder">
+            <summary>
+            Gets and sets the string representation of the default order for a collection of the attributed class.
+            </summary>
+            <value>
+            The string representation of the default order for a collection of the attributed class.
+            </value>
+        </member>
+        <member name="T:Nichevo.ObjectServer.WebObjectAttribute">
+            <summary>
+            Adding this attribute to a field allows the field to be loaded by <see cref="M:Nichevo.ObjectServer.ObjectTransaction.SelectWebObjects(System.Object)">ObjectTransaction.SelectWebObjects</see>
+            directly from a <see cref="T:System.Web.HttpRequest">HttpRequest</see>
+            </summary>
+            <remarks>
+            If applied to private fields then a call to <see cref="M:Nichevo.ObjectServer.ObjectTransaction.SelectWebObjects(System.Object)">ObjectTransaction.SelectWebObjects</see> will leave the attribute field as untouched.
+            Care must be taken not to use ServerObject's from different transactions using this method. 
+            </remarks>
+            <example>
+            In the example below a simple web form contains a <see cref="T:Nichevo.ObjectServer.ServerObject">ServerObject</see> marked with <see cref="T:Nichevo.ObjectServer.WebObjectAttribute">WebObjectAttribute</see>
+            <code>
+            public class MyPage : System.Web.UI.Page
+            {
+            	[WebObject]
+            	protected ServerObject myObject;
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Nichevo.ObjectServer.WebObjectAttribute.#ctor">
+            <summary>
+            Initialises a new instance of WebObjectAttribute
+            </summary>
+        </member>
+        <member name="P:Nichevo.ObjectServer.WebObjectAttribute.RequestKey">
+            <summary>
+            The unique key in the <see cref="T:System.Web.HttpRequest">HttpRequest</see> that contains
+            the primary key used to select the attribute field.
+            </summary>
+            <remarks>
+            If the value is the default value <see cref="F:System.String.Empty">String.Empty</see> then the name of the 
+            attribted field is used.
+            </remarks>
+            <value>
+            The unique key in the <see cref="T:System.Web.HttpRequest">HttpRequest</see> that contains
+            the primary key used to select the attribute field
+            The default value is <see cref="F:System.String.Empty">String.Empty</see>.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.WebObjectAttribute.DefaultValue">
+            <summary>
+            Gets or sets the string representation of the value to be used if the unique key is not found in the <see cref="T:System.Web.HttpRequest">HttpRequest</see>.
+            </summary>
+            <value>
+            The string representation of the value to be used if the unique key is not found in the <see cref="T:System.Web.HttpRequest">HttpRequest</see>; otherwise <see cref="F:System.String.Empty">String.Empty</see>.
+            The default value is <see cref="F:System.String.Empty">String.Empty</see>.
+            </value>
+        </member>
+        <member name="P:Nichevo.ObjectServer.WebObjectAttribute.IsRequired">
+            <summary>
+            Gets or sets whether an <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see> should be thrown if the <see cref="P:Nichevo.ObjectServer.WebObjectAttribute.RequestKey">RequestKey</see> is not located.
+            </summary>
+            <remarks>
+            If IsRequired is <see langword="true">true</see> then and an the <see cref="P:Nichevo.ObjectServer.WebObjectAttribute.RequestKey">RequestKey</see> is not located and no <see cref="P:Nichevo.ObjectServer.WebObjectAttribute.DefaultValue">DefaultValue</see> then the <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see> will be thrown.
+            If IsRequired is <see langword="false">false</see> then the attribute field will be left to its original value.
+            </remarks>
+            <value>
+            <see langword="true">true</see> if an <see cref="T:Nichevo.ObjectServer.ObjectServerException">ObjectServerException</see> should be thrown if the <see cref="P:Nichevo.ObjectServer.WebObjectAttribute.RequestKey">RequestKey</see> is not located; otherwise, <see langword="false">false</see>
+            The default value is <see langword="true">true</see>
+            </value>
+        </member>
+    </members>
+</doc>

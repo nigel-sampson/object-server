@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Object Server Documentation</title>
+		<meta name="GENERATOR" content="Microsoft Visual Studio.NET 7.0">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<style type="text/css"> body { font-size: 11px; font-family: Verdana, Arial, Sans-Serif; }
+	a { color: #0000FF; text-decoration: none; }
+	a:hover { text-decoration: underline; }
+	p { text-align: justify; }
+	pre { padding-top: 10px; border: 1px solid #999999; background-color: #EEEEEE; }
+		</style>
+	</head>
+	<body>
+		<p><b>Defining a business object</b></p>
+		<p>
+			All business objects managed by Object Server must inherit from <i>Nichevo.ObjectServer.ServerObject</i>
+			and since they will invairably invariablycontain abstract properties will also 
+			need to be abstract. Mapping defintions in Object Server are done via custom 
+			attributes, to map the class Invoice to the database table Invoices we will use 
+			the <i>Nichevo.ObjectServer.TableAttribute</i> class. An explanation of the 
+			three positional parameters follows:
+		</p>
+		<ul>
+			<li>
+				<i>"Invoices"</i>
+			- this is name of the table holding the data for the NewsItem class.
+			<li>
+				<i>"Id"</i>
+			- this is the name of the property (not the column) which will hold the value 
+			of this objects primary key.
+			<li>
+				<i>PrimaryKeyType.Identity</i> - this defines what style the primary key, 
+				because we have the table set in SQL Server to identity, we need to tell the 
+				object that the database will manage primary keys.</li>
+		</ul>
+		<pre>
+	[Table("Invoices", "Id", PrimaryKeyType.Identity)]
+	public abstract class Invoice : Nichevo.ObjectServer.ServerObject
+	{
+		...
+	}
+		</pre>
+		<p>The primary key of an object is defined in a similar method to other mapped 
+			properties, the exception being that the primary key should be read-only.</p>
+		<pre>
+	[Column("invoiceID")]
+	public abstract int Id
+	{
+		get;
+	}
+		</pre>
+		<p>
+			Properties that are mapped to a column in the database are mapped using the <i>Nichevo.ObjectServer.ColumnAttribute</i>
+			class. This has only one positional parameter which is the name of the column 
+			to map data from. Note how this property is abstract and no implementation of 
+			the property is needed.
+		</p>
+		<pre>
+	[Column("invoiceOrdered")]
+	public abstract DateTime Ordered
+	{
+		get;
+		set;
+	}
+		</pre>
+		<p>Below is a full (but simple) business object encapsulating an invoice for a web 
+			page.
+		</p>
+		<pre>
+	[Table("Invoices", "Id", PrimaryKeyType.Identity)]
+	public abstract class Invoice : Nichevo.ObjectServer.ServerObject
+	{
+		[Column("invoiceID")]
+		public abstract int Id
+		{
+			get;
+		}
+		
+		[Column("invoiceOrdered")]
+		public abstract DateTime Ordered
+		{
+			get;
+			set;
+		}
+	
+		[Column("address")]
+		public abstract string DeliveryAddress
+		{
+			get;
+			set;
+		}
+	}
+		</pre>
+		<p><b>Creating and destroying business objects</b></p>
+		<p>
+			All interaction with the database is done via <i>Nichevo.ObjectServer.ObjectManager</i>
+			and ultimately <i>Nichevo.ObjectServer.ObjectTransaction</i>. <i>Nichevo.ObjectServer.ObjectManager</i>
+			inherits <i>System.ComponentModel.Component</i> so can be dragged onto your Web 
+			Form via the Toolbox. It has two important properties <i>ObjectServerType</i> which 
+			defines the type of data source to use and <i>ConnectionString</i> which is the 
+			connection string required to connect to the data source. These can be set via 
+			the designer or <span style="FONT-SIZE: 8.5pt; FONT-FAMILY: Verdana; mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">
+				programmatically&nbsp;</span> &nbsp;in Page_Load.
+		</p>
+		<p>
+			Actual object interaction is done via <i>Nichevo.ObjectServer.ObjectTransaction</i>
+			which is created by the <i>Nichevo.ObjectServer.ObjectManager</i> like follows.
+		</p>
+		<pre>
+	ObjectTransaction transaction = manager.BeginTransaction();
+		</pre>
+		<p>After an instance of <i>Nichevo.ObjectServer.ObjectTransaction</i> has been 
+			created, <span style="FONT-SIZE: 8.5pt; FONT-FAMILY: Verdana; mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">
+				business </span>objects can be created with this Create method.</p>
+		<pre>
+	Invoice inv = transaction.Create(typeof(Invoice)) as Invoice;
+		</pre>
+		<p>Certain business objects may request to have their primary key value determined 
+			by the creating program. In this case, an alternative overload of the Create 
+			function has to be used which takes the desired primary key as second 
+			parameter.</p>
+		<pre>
+	Invoice inv = transaction.Create(typeof(Invoice), primaryKeyValue) as Invoice;
+		</pre>
+		<p>Existing business objects are destroyed with the "Delete" function.</p>
+		<pre>
+	transaction.Delete(item);
+		</pre>
+		<p>
+			Deleted objects become unusable during the call. The deletion on the database 
+			is not executed until the transaction is committed. Objects which are created 
+			and destroyed within one transaction are never submitted to the database for 
+			persisting.
+		</p>
+		<p>
+			To commit a transaction of changes to the database user:
+		</p>
+		<pre>
+	transaction.Commit();
+		</pre>
+		<p><b>Retrieving business objects</b></p>
+		<p>Business objects are retrieved from the database via the Select method. To 
+			retrieve a single value use the following overload.</p>
+		<pre>
+	Invoice inv = transaction.Select(typeof(Invoice), primaryKeyValue) as Invoice;
+		</pre>
+		<p><b>Object Relations</b></p>
+		<p>
+			Business object relationships can be defined as either a parent (to one) or 
+			child (to many) relation. For this example we will use the Invoice class 
+			defined above and a new class called InvoiceItem. Invoice is a <i>parent</i> of 
+			InvoiceItem while Invoice has a collection of <i>child</i> InvoiceItems. This 
+			is defined as following in the InvoiceItem class.
+		</p>
+		<p>The following piece of code defines the parent property in the InvoiceItem class 
+			with "invoiceID" being the column in the database storing the foreign key.</p>
+		<pre>
+	[Parent("invoiceID")]
+	public abstract Invoice Inv
+	{
+		get;
+		set;
+	}
+		</pre>
+		<p>For each Parent declaration there must be an associated Children declaration, 
+			the following is the Children declaration of the Invoice class matching the 
+			above Parent declaration.</p>
+		<pre>
+	[Children(typeof(InvoiceItem), "Inv")]
+	public abstract ServerObjectCollection Items
+	{
+		get;
+	}
+		</pre>
+		<p>The first parameter is the type of child item while the second is the name of 
+			the property attributed with the matching <i>Nichevo.ObjectServer.ParentAttribute</i>
+			with the child type.</p>
+		<p>
+			At the moment m:n relationships (many to many) are constructed using a mapping 
+			object with parents objects of both the related types, transparent support for 
+			m:n is planned.
+		</p>
+		<p><b>Wheres the logic?</b></p>
+		<p>
+			The classes defined above are no more than simple data containers which 
+			relational links to other objects. Business objects should also contain logic 
+			to validate date and enforce business rules. The method to do this is to set 
+			the access level of the mapped property to protected and to expose it via a 
+			public property with your logic.
+		</p>
+		<pre>
+	[Column("newsTitle")]
+	protected string title
+	{
+		get;
+		set;
+	}
+	
+	public string Title
+	{
+		get
+		{
+			return title;
+		}
+		set
+		{
+			if(title == null)
+				throw ArgumentNullException("value", "Title cannot be null");
+				
+			value = value.Trim();
+			
+			if(value.Length == 0)
+				throw ArgumentException("Title cannot be an empty string");
+			
+			title = value;
+		}
+	}
+		</pre>
+		<p><b>Querying for multiple objects</b></p>
+		<p>
+			To select multiple objects from the data source you use various overloads of 
+			Select. The first with only the type selects all of a given type in either the 
+			default order specified for the type or if not specified an order from the 
+			database.
+		</p>
+		<pre>
+	ServerObjectCollection invoices = transaction.Select(typeof(Invoice));
+		</pre>
+		<p>
+			More complex queries are defined with the <i>Nichevo.ObjectServer.Constraint</i>
+			class. The constraint string is similar to the SQL WHERE clause with the major 
+			difference being property and not column names are used (note: it is the 
+			abstract property that is used).
+		</p>
+		<pre>
+	Constraint constraint = new Constraint("DeliveryAddress = 'Auckland'");
+	ServerObjectCollection invoices = transaction.Select(typeof(Invoice), constraint);
+		</pre>
+		<p>
+			The above code will return all Invoice objects with a DeliveryAddress (column: 
+			address) equal to 'Auckland'. To prevent SQL injection attacks use <i>Nichevo.ObjectServer.ConstraintParameter</i>. 
+			To achieve a similar results as above use
+		</p>
+		<pre>
+	Constraint constraint = new Constraint("DeliveryAddress = @delivery);
+	constraint.Parameters.Add(new ConstraintParameter("@delivery", "Auckland"));
+	
+	ServerObjectCollection invoices = transaction.Select(typeof(Invoice), constraint);
+		</pre>
+		<p>
+			The order objects are returned in a collection is determined by the 
+			DefaultOrder property in the <i>Nichevo.ObjectServer.TableAttribute</i> unless 
+			another order is specified via the <i>Nichevo.ObjectServer.Ordering</i> overload 
+			of Select.
+		</p>
+		<pre>
+	Ordering order = new Ordering("Ordered");
+	
+	ServerObjectCollection invoices = transaction.Select(typeof(Invoice), order);
+		</pre>
+		<p>
+			<i>Nichevo.ObjectServer.Ordering</i> uses property names in the same method as <i>Nichevo.ObjectServer.Constraint</i>. 
+			If no ordering is given and there is no DefaultOrder specified then order 
+			returned is determined by the data source.
+		</p>
+		<p><b>Known Issues:</b></p>
+		<ol>
+			<li>
+				When an object is assigned a new parent it is not removed from the previous 
+				parents collection of children.</li>
+			<li>
+				Non standard column names in the data source (spaces, non alpha-numeric 
+				characters) will cause badly named parameters.</li>
+			<li>
+				After a transaction commit there will be cache misses for recently inserted 
+				object.</li>
+		</ol>
+		<p><b>Project Plan</b></p>
+		<p><i>1.2.0.0</i></p>
+		<ul>
+			<li>
+				Performance Optimisation</li>
+			<li>
+				Access Object Provider</li>
+			<li>
+				More Server Object Event Methods</li>
+			<li>
+				Rebuild object Queries</li>
+		</ul>
+		<p><i>1.3.0.0</i></p>
+		<ul>
+			<li>
+				Windows App / VS Addin</li>
+			<li>
+				Xml Object Provider</li>
+			<li>
+				M:N Children</li>
+		</ul>
+	</body>
+</html>

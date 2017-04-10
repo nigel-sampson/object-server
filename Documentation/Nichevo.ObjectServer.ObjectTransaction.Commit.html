@@ -1,0 +1,11 @@
+﻿<html dir="LTR"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5"><title>ObjectTransaction.Commit Method</title><xml></xml><link rel="stylesheet" type="text/css" href="MSDN.css"></head><body id="bodyID" class="dtBODY"><div id="nsbanner"><div id="bannerrow1"><table class="bannerparthead" cellspacing="0"><tr id="hdr"><td class="runninghead">ObjectServer, an object persistence framework</td><td class="product"></td></tr></table></div><div id="TitleRow"><h1 class="dtH1">ObjectTransaction.Commit Method </h1></div></div><div id="nstext"><p>
+            Commits the transaction to the data source.
+            </p><div class="syntax">public <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemVoidClassTopic.htm">void</a> Commit();</div><h4 class="dtH4">Remarks</h4><p>
+            Flushes all inserted, updated and deleted objects to the data source. If an error is encountered during the 
+            object graph traversal an <a href="Nichevo.ObjectServer.ObjectServerException.html">ObjectServerException</a> will be thrown
+            an all actions so far will be rolled back, this may leave the object graph in an invalid state so it is not 
+            advised to Commit the transaction again.
+            <p>
+            Commit calculates the correct order of the data source operations including assigning data source assigned keys
+            to refering child objects.
+            </p></p><h4 class="dtH4">See Also</h4><p><a href="Nichevo.ObjectServer.ObjectTransaction.html">ObjectTransaction Class</a> | <a href="Nichevo.ObjectServer.html">Nichevo.ObjectServer Namespace</a></p><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;"><param name="Keyword" value="Commit method"><param name="Keyword" value="Commit method, ObjectTransaction class"><param name="Keyword" value="ObjectTransaction.Commit method"></object><hr><div id="footer"><p></p><p>Generated from assembly Nichevo.ObjectServer [1.1.1685.283]</p></div></div></body></html>

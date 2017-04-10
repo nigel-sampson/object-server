@@ -1,0 +1,7 @@
+(Known Issues)
+Cache miss with primary key after (idenity) insert
+
+(Thoughts)
+Trace info needs more specifics not actions
+MORE TESTS!!!
+Check memory optimisation

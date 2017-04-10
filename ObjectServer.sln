@@ -1,0 +1,58 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectServer", "ObjectServer\ObjectServer.csproj", "{BB506F78-2A03-423B-82C5-FD3A3FCEC451}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{A9FF8813-0B42-44FC-8ACD-9049080DF7AE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License", "License\License.csproj", "{EF276091-A58D-4375-B183-AECA3402EF48}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{8CCEBC00-10AE-4EA8-8B7B-E1B7A958515D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C35D938C-5149-4D52-B750-54A3BBDCA888}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{BB506F78-2A03-423B-82C5-FD3A3FCEC451}.Debug.ActiveCfg = Debug|.NET
+		{BB506F78-2A03-423B-82C5-FD3A3FCEC451}.Debug.Build.0 = Debug|.NET
+		{BB506F78-2A03-423B-82C5-FD3A3FCEC451}.Release.ActiveCfg = Release|.NET
+		{BB506F78-2A03-423B-82C5-FD3A3FCEC451}.Release.Build.0 = Release|.NET
+		{A9FF8813-0B42-44FC-8ACD-9049080DF7AE}.Debug.ActiveCfg = Debug
+		{A9FF8813-0B42-44FC-8ACD-9049080DF7AE}.Release.ActiveCfg = Release
+		{A9FF8813-0B42-44FC-8ACD-9049080DF7AE}.Release.Build.0 = Release
+		{EF276091-A58D-4375-B183-AECA3402EF48}.Debug.ActiveCfg = Debug|.NET
+		{EF276091-A58D-4375-B183-AECA3402EF48}.Debug.Build.0 = Debug|.NET
+		{EF276091-A58D-4375-B183-AECA3402EF48}.Release.ActiveCfg = Release|.NET
+		{EF276091-A58D-4375-B183-AECA3402EF48}.Release.Build.0 = Release|.NET
+		{8CCEBC00-10AE-4EA8-8B7B-E1B7A958515D}.Debug.ActiveCfg = Debug|.NET
+		{8CCEBC00-10AE-4EA8-8B7B-E1B7A958515D}.Debug.Build.0 = Debug|.NET
+		{8CCEBC00-10AE-4EA8-8B7B-E1B7A958515D}.Release.ActiveCfg = Release|.NET
+		{8CCEBC00-10AE-4EA8-8B7B-E1B7A958515D}.Release.Build.0 = Release|.NET
+		{C35D938C-5149-4D52-B750-54A3BBDCA888}.Debug.ActiveCfg = Debug|.NET
+		{C35D938C-5149-4D52-B750-54A3BBDCA888}.Debug.Build.0 = Debug|.NET
+		{C35D938C-5149-4D52-B750-54A3BBDCA888}.Release.ActiveCfg = Release|.NET
+		{C35D938C-5149-4D52-B750-54A3BBDCA888}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Docs.htm = Docs.htm
+		License.snk = License.snk
+		Notes.txt = Notes.txt
+		ObjectServer.snk = ObjectServer.snk
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

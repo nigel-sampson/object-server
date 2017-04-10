@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.3" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>False</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.30\Xml\FxCopReport.Xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="False" />
+  <PermitAnalysis>True</PermitAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>100</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>10</RuleExceptionsThreshold>
+  <Spelling Locale="en-au" />
+ </ProjectOptions>
+ <Targets>
+  <Target Name="C:\Documents and Settings\Nigel\My Documents\Visual Studio Projects\ObjectServer 1.2\ObjectServer\bin\Debug\Nichevo.ObjectServer.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\ComRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.3" LastAnalysis="2004-10-15 07:04:52Z">
+  <Namespaces>
+   <Namespace Name="Nichevo.ObjectServer.License">
+    <Messages>
+     <Message Status="Active" Created="2004-08-11 10:05:42Z">
+      <Rule TypeName="AvoidNamespacesWithFewMembers" />
+      <Issues>
+       <Issue Certainty="50" Level="Warning">
+        <Resolution>
+         <Data>
+          <Items>
+           <Item>Nichevo.ObjectServer.License</Item>
+          </Items>
+         </Data>
+        </Resolution>
+       </Issue>
+      </Issues>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="C:\Documents and Settings\Nigel\My Documents\Visual Studio Projects\ObjectServer 1.2\ObjectServer\bin\Debug\Nichevo.ObjectServer.dll">
+    <Modules>
+     <Module Name="nichevo.objectserver.dll">
+      <Namespaces>
+       <Namespace Name="Nichevo.ObjectServer.Queries">
+        <Classes>
+         <Class Name="ParameterCollection">
+          <Methods>
+           <Method Name="Remove(Nichevo.ObjectServer.Queries.Parameter):System.Void">
+            <Messages>
+             <Message Status="Active" Created="2004-10-15 07:04:52Z">
+              <Rule TypeName="AvoidBuildingNonCallableCode" />
+              <Issues>
+               <Issue Certainty="75" Level="Warning">
+                <Resolution>
+                 <Data>
+                  <Items>
+                   <Item>Nichevo.ObjectServer.Queries.ParameterCollection.Remove(Nichevo.ObjectServer.Queries.Parameter)</Item>
+                  </Items>
+                 </Data>
+                </Resolution>
+               </Issue>
+              </Issues>
+             </Message>
+            </Messages>
+           </Method>
+           <Method Name="Insert(System.Int32,Nichevo.ObjectServer.Queries.Parameter):System.Void">
+            <Messages>
+             <Message Status="Active" Created="2004-10-15 07:04:52Z">
+              <Rule TypeName="AvoidBuildingNonCallableCode" />
+              <Issues>
+               <Issue Certainty="75" Level="Warning">
+                <Resolution>
+                 <Data>
+                  <Items>
+                   <Item>Nichevo.ObjectServer.Queries.ParameterCollection.Insert(System.Int32,Nichevo.ObjectServer.Queries.Parameter)</Item>
+                  </Items>
+                 </Data>
+                </Resolution>
+               </Issue>
+              </Issues>
+             </Message>
+            </Messages>
+           </Method>
+          </Methods>
+         </Class>
+        </Classes>
+       </Namespace>
+       <Namespace Name="Nichevo.ObjectServer.Schema">
+        <Classes>
+         <Class Name="PropertySchema">
+          <Properties>
+           <Property Name="Schema">
+            <Methods>
+             <Method Name="get_Schema():Nichevo.ObjectServer.Schema.TypeSchema">
+              <Messages>
+               <Message Status="Active" Created="2004-09-07 11:33:57Z">
+                <Rule TypeName="AvoidBuildingNonCallableCode" />
+                <Issues>
+                 <Issue Certainty="75" Level="Warning">
+                  <Resolution>
+                   <Data>
+                    <Items>
+                     <Item>Nichevo.ObjectServer.Schema.PropertySchema.get_Schema</Item>
+                    </Items>
+                   </Data>
+                  </Resolution>
+                 </Issue>
+                </Issues>
+               </Message>
+              </Messages>
+             </Method>
+            </Methods>
+           </Property>
+          </Properties>
+         </Class>
+        </Classes>
+       </Namespace>
+       <Namespace Name="Nichevo.ObjectServer.DataAdapter">
+        <Classes>
+         <Class Name="AccessDataContext">
+          <Messages>
+           <Message Status="Active" Created="2004-09-07 11:33:57Z">
+            <Rule TypeName="AvoidBuildingUninstantiatedInternalClasses" />
+            <Issues>
+             <Issue Certainty="75" Level="Warning">
+              <Resolution>
+               <Data>
+                <Items>
+                 <Item>Nichevo.ObjectServer.DataAdapter.AccessDataContext</Item>
+                </Items>
+               </Data>
+              </Resolution>
+             </Issue>
+            </Issues>
+           </Message>
+          </Messages>
+         </Class>
+        </Classes>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AvoidBuildingNonCallableCode">
+    <Name>Avoid building non-callable code into assemblies</Name>
+    <Description>There is code that appears to not be callable from a public or protected code path.</Description>
+    <LongDescription>If this violation fires in error, please send a problem report to the FxCop team.</LongDescription>
+    <GroupOwner>MS FxCopDev</GroupOwner>
+    <DevOwner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules/Performance/UncallableCode.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.30.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidBuildingUninstantiatedInternalClasses">
+    <Name>Avoid building uninstantiated internal classes into assemblies</Name>
+    <Description>An internal class was detected that is apparently never instantiated.</Description>
+    <LongDescription>This rule does not attempt to detect late-bound creation and will generate false positives if instances of a type are only created in this way (for example, by means of Activator.CreateInstance or by passing the type as an argument to a TypeConverter constructor).</LongDescription>
+    <GroupOwner>MS FxCopDev</GroupOwner>
+    <DevOwner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules/Performance/UninstantiatedInternals.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="75">Warning</MessageLevel>
+    <File Name="PerformanceRules.dll" Version="1.30.0.0" />
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewMembers">
+    <Name>Avoid having a namespace with a small number of types</Name>
+    <Description>A namespace should generally have more than five types.</Description>
+    <LongDescription />
+    <GroupOwner>MS FxCopDev</GroupOwner>
+    <DevOwner />
+    <Url>http://www.gotdotnet.com/team/fxcop/docs/rules/DesignRules/AvoidSmallNamespaces.html</Url>
+    <Email>askfxcop@microsoft.com</Email>
+    <MessageLevel Certainty="50">Warning</MessageLevel>
+    <File Name="DesignRules.dll" Version="1.30.0.0" />
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
